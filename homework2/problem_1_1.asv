@@ -1,0 +1,23 @@
+ogImg = imread('DIP.png');
+img = imread('DIP_n1.png');
+
+% Get a section of the image interactively
+[B, c, r] = roipoly(img);
+
+% Look at the histogram to determine the noise
+[hist, npix] = histroi(img, c, r);
+figure, bar(hist, 1);
+
+% Looks like uniform? Try to get the hist from imnoise
+[v, unv] = statmoments(hist,2);
+[~, hist2] = imnoise2(ones(npix, 1), 'uniform', v(1), sqrt(v(2)));
+
+figure, bar(hist2, 1);
+
+% According to slides gmean is good for uniform
+% After trying the means seems hmean is the best
+restored = spfilt(img, 'midpoint', 3, 3);
+
+subplot(2, 3, 1), imshow(img), title('Noisy Image')
+subplot(2, 3, 2), imshow(restored)
+subplot(2, 3, 3), imshow(ogImg), title('Original');
