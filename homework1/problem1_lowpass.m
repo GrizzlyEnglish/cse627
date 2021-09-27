@@ -18,7 +18,7 @@ filter3 = lpfilter('ideal', padded(1), padded(2), 50);
 
 img3 = dftfilt(img, filter3, 'symmetric');
 
-F3 = ifftshift(filter3);
+F3 = fft2(ifftshift(filter3));
 
 subplot(4,2,1), imshow(img)
 subplot(4,2,3), imshow(img1)
